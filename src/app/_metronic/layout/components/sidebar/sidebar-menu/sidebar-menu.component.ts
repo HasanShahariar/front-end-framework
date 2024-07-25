@@ -13,10 +13,12 @@ export class SidebarMenuComponent implements OnInit {
 
   constructor(
     private layoutService:LayoutService
-  ) { }
+  ) { 
+    this.getMenu();
+  }
 
   ngOnInit(): void {
-    this.getMenu();
+    
   }
 
   getMenu(){
