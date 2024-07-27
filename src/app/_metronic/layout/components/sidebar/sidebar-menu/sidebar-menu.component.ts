@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./sidebar-menu.component.scss']
 })
 export class SidebarMenuComponent implements OnInit {
-  private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
+  private authLocalStorageToken = `currentBgclUser`;
   menues: any;
 
   constructor(

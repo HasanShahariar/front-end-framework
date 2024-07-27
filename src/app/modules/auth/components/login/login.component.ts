@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   hasError: boolean;
   returnUrl: string;
   isLoading$: Observable<boolean>;
-  private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
+  private authLocalStorageToken = `currentBgclUser`;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((user: any | undefined) => {
         debugger
-        if (user) {
+        if (user && user.Id!="") {
           const result = this.setAuthFromLocalStorage(user);
           
           this.router.navigate([this.returnUrl]);
@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   private setAuthFromLocalStorage(auth: any): boolean {
     // store auth authToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes
-    if (auth && auth.authToken) {
+    if (auth && auth.JWToken) {
       localStorage.setItem(this.authLocalStorageToken, JSON.stringify(auth));
       return true;
     }

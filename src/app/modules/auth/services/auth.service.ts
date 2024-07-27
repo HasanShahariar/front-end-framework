@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { AuthHTTPService } from './auth-http/auth-http.service';
 import { LayoutService } from 'src/app/_metronic/layout';
 import { HttpClient } from '@angular/common/http';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
 
 export type UserType = UserModel | undefined;
 const API_USERS_URL = `${environment.apiUrl}`;
@@ -18,20 +20,20 @@ const API_USERS_URL = `${environment.apiUrl}`;
 export class AuthService implements OnDestroy {
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
-  private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
-
+  private authLocalStorageToken = `currentBgclUser`;
+  jwtHelper = new JwtHelperService();
   // public fields
   currentUser$: Observable<UserType>;
   isLoading$: Observable<boolean>;
-  currentUserSubject: BehaviorSubject<UserType>;
+  currentUserSubject: BehaviorSubject<any>;
   isLoadingSubject: BehaviorSubject<boolean>;
   
 
-  get currentUserValue(): UserType {
+  get currentUserValue(): any {
     return this.currentUserSubject.value;
   }
 
-  set currentUserValue(user: UserType) {
+  set currentUserValue(user: any) {
     this.currentUserSubject.next(user);
   }
 
@@ -42,45 +44,74 @@ export class AuthService implements OnDestroy {
     private http: HttpClient
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
-    this.currentUserSubject = new BehaviorSubject<UserType>(undefined);
+    this.currentUserSubject = new BehaviorSubject<any>(undefined);
     this.currentUser$ = this.currentUserSubject.asObservable();
     this.isLoading$ = this.isLoadingSubject.asObservable();
     const subscr = this.getUserByToken().subscribe();
     this.unsubscribe.push(subscr);
   }
 
-  login(email: string, password: string) {
-    var loginInfo = {
-      AppId:"WEBAPP",
-      DeviceToken: "null",
-      Email:email,
-      Password:password
-    }
-    return this.http.post<AuthModel>(`${API_USERS_URL}Login/Authenticate`, loginInfo);
-  }
-  // login(email: string, password: string): Observable<any> {
-  //   this.isLoadingSubject.next(true);
-  //   return this.authHttpService.login(email, password).pipe(
-      
-  //     map((auth: any) => {
-  //       debugger
-  //       const result = this.setAuthFromLocalStorage(auth);
-  //       this.getMenuByUser(Number(auth.Id))
-  //       return auth;
-  //     }),
-      
-  //     finalize(() => this.isLoadingSubject.next(false))
-  //   );
+  // login(email: string, password: string) {
+  //   var loginInfo = {
+  //     AppId:"WEBAPP",
+  //     DeviceToken: "null",
+  //     Email:email,
+  //     Password:password
+  //   }
+  //   return this.http.post<AuthModel>(`${API_USERS_URL}Login/Authenticate`, loginInfo);
   // }
+  login(email: string, password: string): Observable<any> {
+    this.isLoadingSubject.next(true);
+    return this.authHttpService.login(email, password).pipe(
+      
+      map((auth: any) => {
+        debugger
+        this.currentUserSubject.next(auth);
+        const result = this.setAuthFromLocalStorage(auth);
+        return auth;
+      }),
+      
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  loggedIn() {
+    const user = localStorage.getItem(this.authLocalStorageToken);
+    return !this.jwtHelper.isTokenExpired(JSON.parse(user)?.JWToken);
+  }
+
+  public getSession(): boolean {
+    return this.loggedIn();
+  }
+
+
+  getUser():Observable<any>{
+    
+    return this.currentUserSubject.pipe(
+      map((user: any) => {
+        
+        if (user) {
+          // this.currentUserSubject.next(user);
+        } else {
+          this.logout();
+        }
+        console.log(user);
+        
+        return user;
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+    
+  }
 
   getMenuByUser(userId:any):Observable<any>{
   
 
     return this.layoutService.getMenuByUser(userId).pipe(
       map((menu: any) => {
-        debugger
+        
         if (menu) {
-          this.currentUserSubject.next(menu);
+          // this.currentUserSubject.next(menu);
         } else {
           this.logout();
         }
@@ -110,6 +141,7 @@ export class AuthService implements OnDestroy {
   // }
 
   logout() {
+    debugger
     localStorage.removeItem(this.authLocalStorageToken);
     this.router.navigate(['/auth/login'], {
       queryParams: {},
