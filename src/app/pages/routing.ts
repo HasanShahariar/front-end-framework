@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from '../modules/auth/services/auth.guard';
 
 const Routing: Routes = [
   {
@@ -47,10 +48,18 @@ const Routing: Routes = [
     loadChildren: () => import('./permission/permission.module').then((m) => m.PermissionModule),
   },
   {
+    path: 'setups',
+    loadChildren: () =>
+      import('../modules/setup/setup.module').then((m) => m.SetupModule),
+  },
+
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full',
   },
+
+
   {
     path: '**',
     redirectTo: 'error/404',
