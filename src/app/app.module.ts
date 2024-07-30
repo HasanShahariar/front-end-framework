@@ -1,7 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
@@ -14,6 +14,11 @@ import { environment } from 'src/environments/environment';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 // #fake-start#
 import { FakeAPIService } from './_fake/fake-api.service';
+import { ChangeDetectionInterceptor } from './shared/services/change-ditection-interceptor';
+import { JwtInterceptor } from './modules/auth/helpers/jwt.interceptor';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { ToastrModule } from 'ngx-toastr';
+
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -45,14 +50,23 @@ function appInitializer(authService: AuthService) {
     InlineSVGModule.forRoot(),
     NgbModule,
     SweetAlert2Module.forRoot(),
+    ToastrModule.forRoot(),
   ],
   providers: [
+    JwtHelperService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { 
+      provide: HTTP_INTERCEPTORS, 
+      useClass: ChangeDetectionInterceptor, 
+      multi: true 
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,
       multi: true,
       deps: [AuthService],
-    },
+    }
+    
   ],
   bootstrap: [AppComponent],
 })

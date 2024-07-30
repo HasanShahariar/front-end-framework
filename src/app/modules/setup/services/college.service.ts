@@ -21,7 +21,7 @@ export class CollegeService {
 
   createCollege(data): Observable<any> {
     return this.httpClient
-      .post<any>(this.baseUrl + 'banks', data)
+      .post<any>(this.baseUrl + 'Colleges/Save', data)
       .pipe(catchError(this.handleError));
   }
 
@@ -38,7 +38,7 @@ export class CollegeService {
   }
   deleteCollege(id: number): Observable<void> {
     return this.httpClient
-      .delete<void>(this.baseUrl + 'banks/' + id)
+      .delete<void>(this.baseUrl + 'Colleges/Remove?id=' + id)
       .pipe(catchError(this.handleError));
   }
 
@@ -58,22 +58,15 @@ export class CollegeService {
       params = params.append('PageParams.PageSize', itemPerPage);
     }
 
-    return this.httpClient
-      .get<any[]>(this.baseUrl + 'banks', {
-        observe: 'response',
-        params,
-      })
-      .pipe(
-        map((response) => {
-          paginatedResult.result = response.body;
-          if (response.headers.get('Pagination') != null) {
-            paginatedResult.pagination = JSON.parse(
-              response.headers.get('Pagination')
-            );
-          }
-          return paginatedResult;
-        })
-      );
+    // return this.httpClient
+    //   .get<Response>(this.baseUrl + 'Colleges/GetAll', {
+    //     observe: 'response',
+    //     params,
+    //   });
+    return this.httpClient.get<any>(`${this.baseUrl}Colleges/GetAll`,{
+          params,
+        });
+      
   }
 
   private handleError(errorResponse: HttpErrorResponse) {

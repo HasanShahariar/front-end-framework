@@ -5,8 +5,197 @@
 @import './assets/sass/plugins.scss';
 // @import "./assets/css/style.rtl.css";
 @import "./assets/sass/style.angular.scss";
+@import "ngx-toastr/toastr";
 
 // Keenicons - High quality and pixel perfect font icons available in 3 styles, duotone, outline and solid for Metronic elements
 @import "./assets/plugins/keenicons/duotone/style.css";
 @import "./assets/plugins/keenicons/outline/style.css";
 @import "./assets/plugins/keenicons/solid/style.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+
+:root {
+    --primary-theme-color: #5962da;
+    --primary-text-color: #000000;
+  }
+
+
+
+
+
+th{
+    background: var(--primary-theme-color) !important ;
+    color: white !important;
+    font-weight: 500 !important;
+}
+.feature-list-header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 43.56px;
+    margin-bottom: 10px;
+  }
+  .feature-section-wrapper {
+    // background: #f7f7f7;
+    // box-shadow: 0px 4px 20px rgba(160, 160, 160, 0.3);
+    // padding: 20px;
+  }
+  .search-input{
+    border: 1px solid #dfdfdf;
+  }
+
+  .search-input-icon{
+    position: absolute;
+    left: 10px;
+    color: var(--primary-theme-color);
+  }
+  .btn-filter{
+    background: var(--primary-theme-color);;
+    border: none;
+    padding: 0px 18px;
+    border-radius: 4px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: white;
+  }
+  .btn-filter i{
+    color: white;
+  }
+  tr {
+    border-bottom: 1px solid #e7e7e7 !important;
+}
+
+.primary-btn{
+  background: var(--primary-theme-color);
+  border: none;
+  padding: 9px 18px;
+  border-radius: 4px;
+  color: white;
+  font-weight: 500;
+}
+.discard-btn{
+  background: #f8f9fa;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.page-link.active, .active > .page-link {
+  z-index: 3;
+  background-color: var(--primary-theme-color) !important;
+  border-color: var(--primary-theme-color) !important;
+}
+.nav-menu-item .menu-link {
+
+  padding: 0 !important;
+
+}
+
+.custom-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url('data:image/svg+xml;utf8,<svg fill="none" stroke="%23333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6"/></svg>') no-repeat right 0.75rem center/8px 10px;
+  padding-right: 2rem;
+  position: relative;
+}
+
+.custom-select:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #333;
+}
+
+.action-dropdown  {
+  position: relative;
+  display: inline-block;
+}
+
+.action-dropdown .dropdown-menu {
+  display: block;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  z-index: 1000;
+  min-width: 120px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  left: -30px;
+  transition: max-height 0.3s ease-out;
+}
+// .dropdown-menu.show {
+//   max-height: 200px; /* Adjust this value according to your content */
+// }
+
+
+
+.action-dropdown .dropdown-menu li {
+  margin: 0;
+}
+
+.action-dropdown .dropdown-menu .dropdown-item {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.action-dropdown .dropdown-menu .dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+.btn-dropdown-action{
+  background-color: transparent;
+  border: 1.5px solid var(--primary-theme-color);
+  padding: 4px 13px;
+  border-radius: 14px;
+}
+.btn-dropdown-action:hover{
+  background-color: var(--primary-theme-color);
+  color: #fff;
+}
+.btn-dropdown-action:hover .btn-dropdown-action.dropdown-toggle::after{
+  border-top: 5px solid #fff;
+}
+
+.btn-dropdown-action.dropdown-toggle::after {
+  content: '';
+  display: inline-block;
+  margin-left: 4px; /* Adjust margin as needed */
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #000000; /* Adjust color as needed */
+  transition: transform 0.3s; /* Smooth transition for rotation */
+}
+
+.btn-dropdown-action.dropdown-toggle:hover::after {
+  border-top-color: #fff; /* Change color to white on hover and when active */
+}
+
+.btn-dropdown-action.dropdown-toggle.active::after {
+  transform: rotate(180deg); /* Rotate the arrow */
+}
+.dropdown-menu.dropup {
+  transform: translateY(-100%); /* Move dropdown above the button */
+  margin-bottom: 4px; /* Adjust spacing as needed */
+}
+tbody tr {
+  cursor: pointer;
+}
+.modal-header{
+  padding: 9px 13px;
+}

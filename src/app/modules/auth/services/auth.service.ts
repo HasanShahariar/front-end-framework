@@ -7,8 +7,9 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { AuthHTTPService } from './auth-http/auth-http.service';
 import { LayoutService } from 'src/app/_metronic/layout';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ToastrService } from 'ngx-toastr';
 
 
 export type UserType = UserModel | undefined;
@@ -23,10 +24,12 @@ export class AuthService implements OnDestroy {
   private authLocalStorageToken = `currentBgclUser`;
   jwtHelper = new JwtHelperService();
   // public fields
-  currentUser$: Observable<UserType>;
+  currentUser$: Observable<any>;
   isLoading$: Observable<boolean>;
   currentUserSubject: BehaviorSubject<any>;
   isLoadingSubject: BehaviorSubject<boolean>;
+  private jWToken = "JWToken";
+  private refToken = "RefreshToken";
   
 
   get currentUserValue(): any {
@@ -41,7 +44,8 @@ export class AuthService implements OnDestroy {
     private authHttpService: AuthHTTPService,
     private router: Router,
     private layoutService:LayoutService,
-    private http: HttpClient
+    private http: HttpClient,
+    private _toastrService: ToastrService
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.currentUserSubject = new BehaviorSubject<any>(undefined);
@@ -65,7 +69,7 @@ export class AuthService implements OnDestroy {
     return this.authHttpService.login(email, password).pipe(
       
       map((auth: any) => {
-        debugger
+        
         this.currentUserSubject.next(auth);
         const result = this.setAuthFromLocalStorage(auth);
         return auth;
@@ -76,6 +80,7 @@ export class AuthService implements OnDestroy {
   }
 
   loggedIn() {
+    
     const user = localStorage.getItem(this.authLocalStorageToken);
     return !this.jwtHelper.isTokenExpired(JSON.parse(user)?.JWToken);
   }
@@ -140,13 +145,7 @@ export class AuthService implements OnDestroy {
   //   );
   // }
 
-  logout() {
-    debugger
-    localStorage.removeItem(this.authLocalStorageToken);
-    this.router.navigate(['/auth/login'], {
-      queryParams: {},
-    });
-  }
+
 
   getUserByToken(): Observable<UserType> {
     const auth = this.getAuthFromLocalStorage();
@@ -216,7 +215,62 @@ export class AuthService implements OnDestroy {
     }
   }
 
+
+
+
+  refreshToken(): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+      }),
+    };
+    // ;
+    var users = {
+      RefreshToken: localStorage.getItem(this.refToken),
+      AccessToken: localStorage.getItem(this.jWToken),
+    };
+    return this.http.post<any>(
+      API_USERS_URL + "Login/RefreshToken",
+      users,
+      httpOptions
+    );
+  }
+  private saveToken(token: string, refreshToken: string): void {
+    localStorage.setItem(this.jWToken, token);
+    localStorage.setItem(this.refToken, refreshToken);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.jWToken);
+  }
+  logout() {
+
+    this.router.navigate(['/auth/login'], {
+      queryParams: {},
+    });
+
+    // this.http.get<any>(API_USERS_URL + "Login/Revoke").subscribe((result) => {
+    //   setTimeout(() => {
+    //     this._toastrService.success("You have successfully Logout", "", {
+    //       toastClass: "toast ngx-toastr",
+    //       closeButton: true,
+    //     });
+    //   }, 1000);
+    //   localStorage.removeItem("currentUser");
+    //   localStorage.removeItem("JWToken");
+    //   localStorage.removeItem("RefreshToken");
+
+    //   this.currentUserSubject.next(null);
+    // });
+  }
+
+
+
+
+
+
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
+
 }

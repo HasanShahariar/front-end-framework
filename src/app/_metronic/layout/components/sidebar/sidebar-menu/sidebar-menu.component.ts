@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LayoutService } from '../../../core/layout.service';
 import { environment } from 'src/environments/environment';
 
@@ -12,13 +12,13 @@ export class SidebarMenuComponent implements OnInit {
   menues: any;
 
   constructor(
-    private layoutService:LayoutService
+    private layoutService:LayoutService,    
+    private cdr: ChangeDetectorRef
   ) { 
     this.getMenu();
   }
 
   ngOnInit(): void {
-    
   }
 
   getMenu(){
@@ -29,6 +29,7 @@ export class SidebarMenuComponent implements OnInit {
         
         this.menues = data;
         console.log(this.menues);
+        this.cdr.detectChanges();
       },
       (err)=>{
         console.log(err);

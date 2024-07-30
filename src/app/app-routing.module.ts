@@ -6,7 +6,7 @@ import { LoginGuard } from './modules/auth/services/login.guard';
 export const routes: Routes = [
   {
     path: 'auth',
-    canActivate:[LoginGuard],
+    // canActivate:[LoginGuard],
     loadChildren: () =>
       import('./modules/auth/auth.module').then((m) => m.AuthModule),
   },

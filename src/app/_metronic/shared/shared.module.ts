@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {KeeniconComponent} from './keenicon/keenicon.component';
 import {CommonModule} from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -8,9 +10,14 @@ import {CommonModule} from "@angular/common";
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,NgSelectModule
   ],
   exports: [
-    KeeniconComponent
+    KeeniconComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    NgSelectModule
   ]
 })
 export class SharedModule {

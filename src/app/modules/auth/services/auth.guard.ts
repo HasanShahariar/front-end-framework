@@ -7,7 +7,7 @@ export class AuthGuard {
   constructor(private authService: AuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    debugger
+    
     const currentUser = this.authService.currentUserValue;
     if (this.checkPermission()) {
       return true;
