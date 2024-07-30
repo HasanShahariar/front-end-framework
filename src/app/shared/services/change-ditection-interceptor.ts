@@ -9,7 +9,7 @@ export class ChangeDetectionInterceptor implements HttpInterceptor {
 
   constructor(
     private appRef: ApplicationRef,
-    private cdr: ChangeDetectorRef,
+    // private cdr: ChangeDetectorRef,
 
   ) { }
 
@@ -20,7 +20,7 @@ export class ChangeDetectionInterceptor implements HttpInterceptor {
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           // Trigger change detection
-             this.cdr.detectChanges();
+            //  this.cdr.detectChanges();
           this.appRef.tick();
         }
       })
