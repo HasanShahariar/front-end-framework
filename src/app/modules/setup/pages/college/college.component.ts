@@ -207,7 +207,7 @@ export class CollegeComponent implements OnInit {
         if (data.HasError) {
           this.showAlert(errorAlert);
         } else {
-          debugger
+          
           this.showAlert(successAlert);
     
           // this.router.navigate(["setup/brand-list"]);

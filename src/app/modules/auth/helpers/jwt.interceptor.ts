@@ -15,7 +15,6 @@ import {
   switchMap,
   take,
 } from "rxjs/operators";
-import { AuthenticationService } from "../services/authentication.service";
 import { AuthService } from "..";
 import { environment } from "src/environments/environment";
 

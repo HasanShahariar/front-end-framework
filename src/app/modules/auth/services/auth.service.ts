@@ -244,11 +244,12 @@ export class AuthService implements OnDestroy {
     return localStorage.getItem(this.jWToken);
   }
   logout() {
-    debugger
+    
 
     this.router.navigate(['/auth/login'], {
       queryParams: {},
     });
+    localStorage.removeItem("currentBgclUser");
 
     // this.http.get<any>(API_USERS_URL + "Login/Revoke").subscribe((result) => {
     //   setTimeout(() => {
