@@ -9,7 +9,7 @@ export class LoginGuard {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean {
-    
+    debugger
     if (this.checkPermission()) {
       this.router.navigate(['/dashboard']);
       return false;

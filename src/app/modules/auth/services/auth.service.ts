@@ -244,6 +244,7 @@ export class AuthService implements OnDestroy {
     return localStorage.getItem(this.jWToken);
   }
   logout() {
+    debugger
 
     this.router.navigate(['/auth/login'], {
       queryParams: {},
